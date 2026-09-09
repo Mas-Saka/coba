@@ -72,8 +72,8 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
 ## Aktivitas 3 — Diagram Skema
 ```
 <                 
-                    ┌─────────────────────┐
-                    │    DIM_TANGGAL      │
+                                        ┌─────────────────────┐
+                    │     DIM_TANGGAL     │
                     ├─────────────────────┤
                     │ PK tanggal_key      │
                     │ tanggal             │
@@ -90,22 +90,43 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
 │ nama_menu           │        │        │ nama_cabang         │
 │ kategori            │        │        │ lokasi              │
 │ harga               │        │        └──────────┬──────────┘
+│ effective_date      │        │                   │
+│ end_date            │        │                   │
+│ is_current          │        │                   │
 └──────────┬──────────┘        │                   │
+           │                   │                   │
+           │                   │                   │
+           │                   │                   │
+           │                   │                   │
+           │                   │                   │
+           │                   │                   │
+           │                   │                   │
            │                   │                   │
            │                   │                   │
            └───────────────────┼───────────────────┘
                                │
-                               ▼
-                    ┌─────────────────────┐
+                               │
+                    ┌──────────┴──────────┐
                     │   FACT_PENJUALAN    │
                     ├─────────────────────┤
                     │ PK penjualan_key    │
                     │ FK tanggal_key      │
                     │ FK menu_key         │
                     │ FK cabang_key       │
+                    │ FK porsi_key        │
                     │ jumlah_terjual      │
                     │ total_penjualan     │
+                    │ diskon              │
                     │ harga_satuan        │
+                    └──────────┬──────────┘
+                               │
+                               │
+                    ┌──────────▼──────────┐
+                    │      DIM_PORSI      │
+                    ├─────────────────────┤
+                    │ PK porsi_key        │
+                    │ nama_porsi          │
+                    │ keterangan          │
                     └─────────────────────┘
 >
 ```                    
