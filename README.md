@@ -279,6 +279,53 @@ VALUES
 ('Biasa', 'Porsi standar'),
 ('Jumbo', 'Porsi lebih besar');
 
+INSERT INTO fact_penjualan
+(tanggal_id, cabang_id, menu_id, porsi_id, jumlah_terjual, harga_satuan, diskon)
+
+SELECT
+    d.tanggal_id,
+    c.cabang_id,
+    m.menu_id,
+    p.porsi_id,
+    x.jumlah_terjual,
+    x.harga_satuan,
+    x.diskon
+
+FROM (
+    VALUES
+        ('2026-09-01', 'AF001', 'M001', 'Biasa', 3, 15000, 0),
+        ('2026-09-01', 'AF001', 'M002', 'Biasa', 2, 18000, 0),
+        ('2026-09-01', 'AF002', 'M001', 'Biasa', 5, 15000, 2000),
+        ('2026-09-02', 'AF002', 'M003', 'Jumbo', 3, 18000, 0),
+        ('2026-09-02', 'AF003', 'M001', 'Biasa', 4, 15000, 0),
+        ('2026-09-03', 'AF001', 'M004', 'Biasa', 2, 16000, 0),
+        ('2026-09-03', 'AF002', 'M002', 'Jumbo', 4, 18000, 3000),
+        ('2026-09-04', 'AF003', 'M001', 'Biasa', 6, 15000, 0),
+        ('2026-09-05', 'AF001', 'M005', 'Biasa', 8, 5000, 0),
+        ('2026-09-05', 'AF002', 'M001', 'Jumbo', 5, 15000, 0),
+        ('2026-09-06', 'AF003', 'M002', 'Biasa', 3, 18000, 0),
+        ('2026-09-06', 'AF001', 'M003', 'Jumbo', 2, 18000, 1000)
+) AS x(
+    tanggal,
+    kode_cabang,
+    kode_menu,
+    nama_porsi,
+    jumlah_terjual,
+    harga_satuan,
+    diskon
+)
+
+JOIN dim_tanggal d
+    ON d.tanggal_actual = x.tanggal::DATE
+
+JOIN dim_cabang c
+    ON c.cabang_code = x.kode_cabang
+
+JOIN dim_menu m
+    ON m.menu_code = x.kode_menu
+
+JOIN dim_porsi p
+    ON p.porsi_name = x.nama_porsi;
 
 ```
 
@@ -304,7 +351,7 @@ ORDER BY total_penjualan DESC;
 "Bakso Kuah"	2	32000.00>
 
 ### Catatan Commit
--  Seed 10 baris fact + query agregasi sukses
+-  Seed 12 baris fact + query agregasi sukses
 
 ---
 
