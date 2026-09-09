@@ -70,8 +70,8 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
 ---
 
 ## Aktivitas 3 — Diagram Skema
-
-<                      ```text
+```
+<                 
                     ┌─────────────────────┐
                     │    DIM_TANGGAL      │
                     ├─────────────────────┤
@@ -107,7 +107,7 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
                     │ total_penjualan     │
                     │ harga_satuan        │
                     └─────────────────────┘
-```>
+>
                     
 ```
 
