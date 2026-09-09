@@ -113,6 +113,7 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
 
 ```
 
+```
 ## Aktivitas 4 — DDL PostgreSQL
 
 > *Tempel CREATE TABLE lengkap (fact + min 3 dimensi) dengan PK/FK/CHECK +
