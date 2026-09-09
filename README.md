@@ -108,10 +108,10 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
                     │ harga_satuan        │
                     └─────────────────────┘
 >
-                    
+```                    
 ```
 
-```
+
 
 ```
 ## Aktivitas 4 — DDL PostgreSQL
