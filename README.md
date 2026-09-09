@@ -107,8 +107,8 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
                     │ total_penjualan     │
                     │ harga_satuan        │
                     └─────────────────────┘
-
-      >              
+>
+                    
 ```
 
 ```
