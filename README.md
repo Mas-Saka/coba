@@ -129,7 +129,7 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
                     │ keterangan          │
                     └─────────────────────┘
 
-
+    
 
 
 ```
@@ -141,24 +141,104 @@ dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti me
 
 ```sql
 -- ============ DIMENSIONS ============
-CREATE TABLE dim_date (
-    -- ...
-);
-CREATE TABLE dim_outlet (
-    -- ...
-);
-CREATE TABLE dim_menu (
-    -- ... (dengan kolom SCD Type 2 bila dipilih)
+CREATE TABLE dim_tanggal (
+    tanggal_id SERIAL PRIMARY KEY,
+    tanggal_actual DATE NOT NULL UNIQUE,
+    hari_ke SMALLINT NOT NULL
+        CHECK (hari_ke BETWEEN 1 AND 7),
+    nama_hari VARCHAR(15) NOT NULL,
+    bulan_ke SMALLINT NOT NULL
+        CHECK (bulan_ke BETWEEN 1 AND 12),
+    nama_bulan VARCHAR(15) NOT NULL,
+    tahun SMALLINT NOT NULL,
+    is_weekend BOOLEAN DEFAULT FALSE,
+    is_holiday BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE dim_cabang (
+    cabang_id SERIAL PRIMARY KEY,
+    cabang_code VARCHAR(10) NOT NULL UNIQUE,
+    cabang_name VARCHAR(100) NOT NULL,
+    location VARCHAR(150) NOT NULL
+);
+
+CREATE TABLE dim_menu (
+    menu_id SERIAL PRIMARY KEY,
+    menu_code VARCHAR(20) NOT NULL,
+    menu_name VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    unit_price NUMERIC(10,2) NOT NULL
+        CHECK (unit_price >= 0),
+    effective_from DATE NOT NULL,
+    effective_to DATE,
+    is_current BOOLEAN DEFAULT TRUE,
+
+    CHECK (
+        effective_to IS NULL
+        OR effective_to >= effective_from
+    )
+);
+
+CREATE TABLE dim_porsi (
+    porsi_id SERIAL PRIMARY KEY,
+    porsi_name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(150)
+);
+
+
 -- ============ FACT ============
-CREATE TABLE fact_sales (
-    -- ... PK, FK, CHECK
+CREATE TABLE fact_penjualan (
+    penjualan_id BIGSERIAL PRIMARY KEY,
+
+    tanggal_id INTEGER NOT NULL,
+    cabang_id INTEGER NOT NULL,
+    menu_id INTEGER NOT NULL,
+    porsi_id INTEGER NOT NULL,
+
+    jumlah_terjual INTEGER NOT NULL
+        CHECK (jumlah_terjual > 0),
+
+    harga_satuan NUMERIC(10,2) NOT NULL
+        CHECK (harga_satuan >= 0),
+
+    diskon NUMERIC(10,2) DEFAULT 0
+        CHECK (diskon >= 0),
+
+    total_penjualan NUMERIC(12,2)
+        GENERATED ALWAYS AS
+        ((jumlah_terjual * harga_satuan) - diskon) STORED,
+
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_penjualan_tanggal
+        FOREIGN KEY (tanggal_id)
+        REFERENCES dim_tanggal(tanggal_id),
+
+    CONSTRAINT fk_penjualan_cabang
+        FOREIGN KEY (cabang_id)
+        REFERENCES dim_cabang(cabang_id),
+
+    CONSTRAINT fk_penjualan_menu
+        FOREIGN KEY (menu_id)
+        REFERENCES dim_menu(menu_id),
+
+    CONSTRAINT fk_penjualan_porsi
+        FOREIGN KEY (porsi_id)
+        REFERENCES dim_porsi(porsi_id)
 );
 
 -- ============ INDEXES (min 2) ============
-CREATE INDEX ... ON fact_sales(...);
-CREATE INDEX ... ON fact_sales(...);
+CREATE INDEX idx_fact_penjualan_tanggal
+ON fact_penjualan(tanggal_id);
+
+CREATE INDEX idx_fact_penjualan_cabang
+ON fact_penjualan(cabang_id);
+
+CREATE INDEX idx_fact_penjualan_menu
+ON fact_penjualan(menu_id);
+
+CREATE INDEX idx_fact_penjualan_porsi
+ON fact_penjualan(porsi_id);
 ```
 
 ---
@@ -167,25 +247,64 @@ CREATE INDEX ... ON fact_sales(...);
 
 **Seed data (min 10 baris fact):**
 ```sql
-INSERT INTO fact_sales (...) VALUES
-    (...), (...), ... ;   -- min 10 baris
+INSERT INTO dim_tanggal
+(tanggal_actual, hari_ke, nama_hari, bulan_ke, nama_bulan, tahun, is_weekend, is_holiday)
+VALUES
+('2026-09-01', 2, 'Selasa', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-02', 3, 'Rabu', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-03', 4, 'Kamis', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-04', 5, 'Jumat', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-05', 6, 'Sabtu', 9, 'September', 2026, TRUE, FALSE),
+('2026-09-06', 7, 'Minggu', 9, 'September', 2026, TRUE, FALSE);
+
+INSERT INTO dim_cabang
+(cabang_code, cabang_name, location)
+VALUES
+('AF001', 'Mie Ayam Afui Cabang 1', 'Yogyakarta'),
+('AF002', 'Mie Ayam Afui Cabang 2', 'Yogyakarta'),
+('AF003', 'Mie Ayam Afui Cabang 3', 'Yogyakarta');
+
+INSERT INTO dim_menu
+(menu_code, menu_name, category, unit_price, effective_from, effective_to, is_current)
+VALUES
+('M001', 'Mie Ayam Original', 'Mie Ayam', 15000, '2026-01-01', NULL, TRUE),
+('M002', 'Mie Ayam Bakso', 'Mie Ayam', 18000, '2026-01-01', NULL, TRUE),
+('M003', 'Mie Ayam Ceker', 'Mie Ayam', 18000, '2026-01-01', NULL, TRUE),
+('M004', 'Bakso Kuah', 'Bakso', 16000, '2026-01-01', NULL, TRUE),
+('M005', 'Es Teh', 'Minuman', 5000, '2026-01-01', NULL, TRUE);
+
+INSERT INTO dim_porsi
+(porsi_name, description)
+VALUES
+('Biasa', 'Porsi standar'),
+('Jumbo', 'Porsi lebih besar');
+
+
 ```
 
 **Query agregasi contoh (yang berhasil dijalankan):**
 ```sql
--- Contoh: penjualan per menu per bulan
-SELECT m.menu_name, d.month_name, SUM(f.amount)
-FROM fact_sales f
-JOIN dim_menu m ON f.menu_id = m.menu_id
-JOIN dim_date d ON f.date_id = d.date_id
-GROUP BY m.menu_name, d.month_name;
+
+SELECT
+    m.menu_name,
+    SUM(f.jumlah_terjual) AS total_item_terjual,
+    SUM(f.total_penjualan) AS total_penjualan
+FROM fact_penjualan f
+JOIN dim_menu m
+    ON f.menu_id = m.menu_id
+GROUP BY m.menu_name
+ORDER BY total_penjualan DESC;
 ```
 
 **Hasil (screenshot/teks):**
-<tempel hasil query atau screenshot link>
+<"Mie Ayam Original"	23	343000.00
+"Mie Ayam Bakso"	9	159000.00
+"Mie Ayam Ceker"	5	89000.00
+"Es Teh"	8	40000.00
+"Bakso Kuah"	2	32000.00>
 
 ### Catatan Commit
-- ...
+-  Seed 10 baris fact + query agregasi sukses
 
 ---
 
