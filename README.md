@@ -247,25 +247,116 @@ ON fact_penjualan(porsi_id);
 
 **Seed data (min 10 baris fact):**
 ```sql
-INSERT INTO fact_sales (...) VALUES
-    (...), (...), ... ;   -- min 10 baris
+INSERT INTO dim_tanggal
+(tanggal_actual, hari_ke, nama_hari, bulan_ke, nama_bulan, tahun, is_weekend, is_holiday)
+VALUES
+('2026-09-01', 2, 'Selasa', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-02', 3, 'Rabu', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-03', 4, 'Kamis', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-04', 5, 'Jumat', 9, 'September', 2026, FALSE, FALSE),
+('2026-09-05', 6, 'Sabtu', 9, 'September', 2026, TRUE, FALSE),
+('2026-09-06', 7, 'Minggu', 9, 'September', 2026, TRUE, FALSE);
+
+INSERT INTO dim_cabang
+(cabang_code, cabang_name, location)
+VALUES
+('AF001', 'Mie Ayam Afui Cabang 1', 'Yogyakarta'),
+('AF002', 'Mie Ayam Afui Cabang 2', 'Yogyakarta'),
+('AF003', 'Mie Ayam Afui Cabang 3', 'Yogyakarta');
+
+INSERT INTO dim_menu
+(menu_code, menu_name, category, unit_price, effective_from, effective_to, is_current)
+VALUES
+('M001', 'Mie Ayam Original', 'Mie Ayam', 15000, '2026-01-01', NULL, TRUE),
+('M002', 'Mie Ayam Bakso', 'Mie Ayam', 18000, '2026-01-01', NULL, TRUE),
+('M003', 'Mie Ayam Ceker', 'Mie Ayam', 18000, '2026-01-01', NULL, TRUE),
+('M004', 'Bakso Kuah', 'Bakso', 16000, '2026-01-01', NULL, TRUE),
+('M005', 'Es Teh', 'Minuman', 5000, '2026-01-01', NULL, TRUE);
+
+INSERT INTO dim_porsi
+(porsi_name, description)
+VALUES
+('Biasa', 'Porsi standar'),
+('Jumbo', 'Porsi lebih besar');
+
+INSERT INTO fact_penjualan
+(tanggal_id, cabang_id, menu_id, porsi_id, jumlah_terjual, harga_satuan, diskon)
+
+SELECT
+    d.tanggal_id,
+    c.cabang_id,
+    m.menu_id,
+    p.porsi_id,
+    x.jumlah_terjual,
+    x.harga_satuan,
+    x.diskon
+
+FROM (
+    VALUES
+        ('2026-09-01', 'AF001', 'M001', 'Biasa', 3, 15000, 0),
+        ('2026-09-01', 'AF001', 'M002', 'Biasa', 2, 18000, 0),
+        ('2026-09-01', 'AF002', 'M001', 'Biasa', 5, 15000, 2000),
+        ('2026-09-02', 'AF002', 'M003', 'Jumbo', 3, 18000, 0),
+        ('2026-09-02', 'AF003', 'M001', 'Biasa', 4, 15000, 0),
+        ('2026-09-03', 'AF001', 'M004', 'Biasa', 2, 16000, 0),
+        ('2026-09-03', 'AF002', 'M002', 'Jumbo', 4, 18000, 3000),
+        ('2026-09-04', 'AF003', 'M001', 'Biasa', 6, 15000, 0),
+        ('2026-09-05', 'AF001', 'M005', 'Biasa', 8, 5000, 0),
+        ('2026-09-05', 'AF002', 'M001', 'Jumbo', 5, 15000, 0),
+        ('2026-09-06', 'AF003', 'M002', 'Biasa', 3, 18000, 0),
+        ('2026-09-06', 'AF001', 'M003', 'Jumbo', 2, 18000, 1000)
+) AS x(
+    tanggal,
+    kode_cabang,
+    kode_menu,
+    nama_porsi,
+    jumlah_terjual,
+    harga_satuan,
+    diskon
+)
+
+JOIN dim_tanggal d
+    ON d.tanggal_actual = x.tanggal::DATE
+
+JOIN dim_cabang c
+    ON c.cabang_code = x.kode_cabang
+
+JOIN dim_menu m
+    ON m.menu_code = x.kode_menu
+
+JOIN dim_porsi p
+    ON p.porsi_name = x.nama_porsi;
+
 ```
 
 **Query agregasi contoh (yang berhasil dijalankan):**
 ```sql
--- Contoh: penjualan per menu per bulan
-SELECT m.menu_name, d.month_name, SUM(f.amount)
-FROM fact_sales f
-JOIN dim_menu m ON f.menu_id = m.menu_id
-JOIN dim_date d ON f.date_id = d.date_id
-GROUP BY m.menu_name, d.month_name;
+
+SELECT
+    m.menu_name,
+    SUM(f.jumlah_terjual) AS total_item_terjual,
+    SUM(f.total_penjualan) AS total_penjualan
+FROM fact_penjualan f
+JOIN dim_menu m
+    ON f.menu_id = m.menu_id
+GROUP BY m.menu_name
+ORDER BY total_penjualan DESC;
 ```
 
 **Hasil (screenshot/teks):**
-<tempel hasil query atau screenshot link>
+```
+ Menu              | Total Item Terjual | Total Penjualan |
+| ----------------- | -----------------: | --------------: |
+| Mie Ayam Original |                 23 |    Rp343.000,00 |
+| Mie Ayam Bakso    |                  9 |    Rp159.000,00 |
+| Mie Ayam Ceker    |                  5 |     Rp89.000,00 |
+| Es Teh            |                  8 |     Rp40.000,00 |
+| Bakso Kuah        |                  2 |     Rp32.000,00 |
+
+```
 
 ### Catatan Commit
-- ...
+-  Seed 12 baris fact + query agregasi sukses
 
 ---
 
