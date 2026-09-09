@@ -344,11 +344,16 @@ ORDER BY total_penjualan DESC;
 ```
 
 **Hasil (screenshot/teks):**
-<"Mie Ayam Original"	23	343000.00
-"Mie Ayam Bakso"	9	159000.00
-"Mie Ayam Ceker"	5	89000.00
-"Es Teh"	8	40000.00
-"Bakso Kuah"	2	32000.00>
+```
+ Menu              | Total Item Terjual | Total Penjualan |
+| ----------------- | -----------------: | --------------: |
+| Mie Ayam Original |                 23 |    Rp343.000,00 |
+| Mie Ayam Bakso    |                  9 |    Rp159.000,00 |
+| Mie Ayam Ceker    |                  5 |     Rp89.000,00 |
+| Es Teh            |                  8 |     Rp40.000,00 |
+| Bakso Kuah        |                  2 |     Rp32.000,00 |
+
+```
 
 ### Catatan Commit
 -  Seed 12 baris fact + query agregasi sukses
