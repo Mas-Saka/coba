@@ -43,6 +43,8 @@ Jumlah data sebelum dan setelah ETL tetap sama, yaitu 12 data, karena data trans
 
 - `SELECT m.menu_name, SUM(f.jumlah_terjual) AS total_item_terjual, SUM(f.total_penjualan) AS total_penjualan FROM fact_penjualan f JOIN dim_menu m ON f.menu_id = m.menu_id GROUP BY m.menu_name ORDER BY total_penjualan DESC;`
 
+    Hasil : 
+    
     ![alt text](image-3.png)
 
 
