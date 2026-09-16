@@ -52,7 +52,8 @@
 Untuk Mie Ayam Afui, fact table fact_penjualan akan terhubung langsung dengan: 
 - dim_date
 - dim_cabang
-- dim_menu
+- dim_menu<img width="712" height="332" alt="image" src="https://github.com/user-attachments/assets/052d934e-4a10-4beb-9e70-2c16965cf6a8" />
+
 - dim_porsi
 
 dengan struktur ini, pengelola Mie ayam Afui dapat melakukan analisis seperti mencari menu paling laris, menghitung total penjualan per cabang, penjualan berdasarkan porsi, tren penjualan dan perbandingan performa tiga cabang.  Skema juga tetap dapat dikembangkan apabila Mie Ayam Afui menambah cabang atau kebutuhan analisis lainnya.>
