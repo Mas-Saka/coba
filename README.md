@@ -36,7 +36,8 @@
     Sesudah :
 
 ![alt text](image-2.png)
-    Jumlah data sebelum dan setelah ETL tetap sama, yaitu 12 data, karena data transaksi pada periode tersebut sebelumnya sudah diinputkan pada LK-03. Pada proses ETL, data pada periode yang sama dihapus terlebih dahulu menggunakan strategi delete-then-insert, kemudian dimuat kembali berdasarkan data dari file CSV. Oleh karena itu, jumlah baris tetap 12, tetapi proses ETL tetap berhasil melakukan pemuatan ulang data tanpa menghasilkan duplikasi.
+
+Jumlah data sebelum dan setelah ETL tetap sama, yaitu 12 data, karena data transaksi pada periode tersebut sebelumnya sudah diinputkan pada LK-03. Pada proses ETL, data pada periode yang sama dihapus terlebih dahulu menggunakan strategi delete-then-insert, kemudian dimuat kembali berdasarkan data dari file CSV. Oleh karena itu, jumlah baris tetap 12, tetapi proses ETL tetap berhasil melakukan pemuatan ulang data tanpa menghasilkan duplikasi.
 
 - 1 query agregasi (mis. revenue per menu) setelah ETL:
 - `SELECT m.menu_name, SUM(f.jumlah_terjual) AS total_item_terjual, SUM(f.total_penjualan) AS total_penjualan FROM fact_penjualan f JOIN dim_menu m ON f.menu_id = m.menu_id GROUP BY m.menu_name ORDER BY total_penjualan DESC;`
