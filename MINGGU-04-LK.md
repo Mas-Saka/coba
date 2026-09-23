@@ -1,57 +1,42 @@
-# Lembar Kerja Mahasiswa (LK) — Pertemuan 4
-## Tugas 3: ETL Process Design & Implementation
+# Lembar Kerja Mahasiswa (LK) — Pertemuan 5 (FORMATIF, bobot 0%)
+## Advanced SQL untuk BI — Presentasi & Information-gap
 
-> **PETUNJUK:** Copy ke `kel-XX/minggu-04/LK.md`. Commit bertahap min 10x.
-> Sertakan file `etl.py`. Push sebelum akhir sesi. Jangan hapus git history / edit kelompok lain.
+> **FORMATIF** — tidak masuk nilai sumatif. Kerjakan untuk penguatan skill sebelum
+> blok visualisasi (minggu 6-7). Copy ke `kel-XX/minggu-05/LK.md`. Tetap commit bertahap.
 
 ## Identitas
 | Field | Isi |
 |---|---|
 | Kelas | SI-C |
 | Kelompok | 06 |
-| Tanggal | 2026-09-11 |
-| Sub-CPMK | Sub-CPMK02 — ETL Process Design |
-| Bobot | 3% (Tugas 3) |
-| Domain | (lanjutan Tugas 1-2) |
+| Tanggal | 2026-09-22 |
+| Sub-CPMK | Sub-CPMK02 — Advanced SQL (formatif) |
+| Bobot | 0% (feedback saja) |
 
-## Aktivitas 1 — Desain ETL
-- **Sumber data:** <daftar sumber CSV/Excel/dll>
-- **Daftar transform:** <urutan pembersihan/derivasi>
-- **Strategi idempotensi:** <delete-then-insert / UPSERT; jelaskan>
+## Aktivitas 1 — Query Analitik Kelompok (window/CTE)
+> Tempel 1 query window function atau CUE dari kelompok + jelaskan maksud bisnisnya.
 
-## Aktivitas 2 — Data Quality Checks (min 3, sebut dimensinya)
-1. <check> — dimensi: <completeness/uniqueness/validity/...>
-2. <check> — dimensi: <...>
-3. <check> — dimensi: <...>
+```sql
+SELECT c.cabang_name, m.menu_name, SUM(f.jumlah_terjual) AS total_item_terjual, RANK() OVER ( PARTITION BY c.cabang_id ORDER BY SUM(f.jumlah_terjual) DESC ) AS peringkat_menu FROM fact_penjualan f JOIN dim_cabang c ON f.cabang_id = c.cabang_id JOIN dim_menu m ON f.menu_id = m.menu_id GROUP BY c.cabang_id, c.cabang_name, m.menu_id, m.menu_name ORDER BY c.cabang_name, peringkat_menu;
+```
+**Maksud bisnis:** <Query digunakan untuk mengetahui peringkat menu berdasarkan jumlah item yang terjual pada masing-masing cabang Mie Ayam Afui. Fungsi RANK() digunakan untuk memberikan peringkat menu di dalam setiap cabang. Dengan hasil tersebut, pengelola dapat mengetahui menu yang paling banyak terjual pada setiap cabang dan membandingkan pola penjualan antar-cabang.
 
-## Aktivitas 3 — Kode & Bukti
-> Tempel `etl.py` (atau commit file terpisah `etl.py` di folder ini). Pastikan jalan.
-    ![alt text](buktipythonjalan.png)
+Query ini menggunakan PARTITION BY berdasarkan cabang sehingga peringkat dimulai kembali dari setiap cabang>
 
-**Bukti jalan (screenshot/teks):**
-- `SELECT COUNT(*) FROM fact_penjualan` sebelum & sesudah ETL:
-    Sebelum :
-![alt text](image.png)
+## Aktivitas 2 — EXPLAIN ANALYZE
+> Tempel ringkasan plan (Index Scan / Seq Scan, actual time) + analisis singkat.
+- Jenis scan: <...>
+- Analisis: <perlu index? mengapa?>
 
-    Sesudah :
-    ![alt text](image-2.png)
-
-    Jumlah data sebelum dan setelah ETL tetap sama, yaitu 12 data, karena data transaksi pada periode tersebut sebelumnya sudah diinputkan pada LK-03. Pada proses ETL, data pada periode yang sama dihapus terlebih dahulu menggunakan strategi delete-then-insert, kemudian dimuat kembali berdasarkan data dari file CSV. Oleh karena itu, jumlah baris tetap 12, tetapi proses ETL tetap berhasil melakukan pemuatan ulang data tanpa menghasilkan duplikasi.
-
-- 1 query agregasi (mis. revenue per menu) setelah ETL:
-- `SELECT m.menu_name, SUM(f.jumlah_terjual) AS total_item_terjual, SUM(f.total_penjualan) AS total_penjualan FROM fact_penjualan f JOIN dim_menu m ON f.menu_id = m.menu_id GROUP BY m.menu_name ORDER BY total_penjualan DESC;`
-    ![alt text](image-3.png)
-## Aktivitas 4 — Keputusan Desain (min 2)
-| Keputusan | Pilihan | Alasan |
-|---|---|---|
-| <mis. bulk vs loop insert> | | |
-| <mis. UPSERT vs delete-insert fact> | | |
+## Aktivitas 3 — Information-gap (refleksi)
+- Query yang paling sulit disatukan saat pairing: <...>
+- Pelajaran yang didapat: <...>
 
 ## Refleksi Pribadi Per Anggota
 > Wajib masing-masing anggota (1-2 paragraf). 
 
 ### [Isyaka Dhafa Maulana — Ketua]
-<refleksi>
+<refleksi >
 
 ### [Habrian Daffa Dwiyandana - Anggota 2]
 <refleksi>
@@ -65,20 +50,8 @@
 ### [Embun Bigar Hidayat - Anggota 5]
 <refleksi>
 
-## Daftar Kontribusi
-| Anggota | Bagian yang Dikerjakan | Persentase Kontribusi |
-|---|---|---|
-| Isyaka Dhafa Maulana |  |  % |
-| Habrian Daffa Dwiyandana | |  % |
-| Mohamad Safi'i |  |  % |
-| Muhammad Irfan Mukasyaf Al Fuady |  |  % |
-| Embun Bigar Hidayat |  |  % |
-| **Total** | | **100%** |
-
 ## Checklist
-- [ ] Desain ETL + idempotensi tercatat
-- [ ] >=3 quality check + dimensi
-- [ ] etl.py jalan + bukti COUNT + query agregasi
-- [ ] >=2 keputusan desain
-- [ ] Refleksi semua anggota + kontribusi 100%
-- [ ] >=10 commit deskriptif + push
+- [ ] 1 query window/CTE + maksud bisnis
+- [ ] EXPLAIN ringkas + analisis
+- [ ] Refleksi information-gap
+- [ ] Refleksi anggota
