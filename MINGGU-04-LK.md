@@ -39,13 +39,19 @@ ORDER BY
     c.cabang_name,
     peringkat_menu;
 ```
-**Maksud bisnis:** 
-<Query digunakan untuk mengetahui peringkat menu berdasarkan jumlah item yang terjual pada masing-masing cabang Mie Ayam Afui. Fungsi RANK() digunakan untuk memberikan peringkat menu di dalam setiap cabang. Dengan hasil tersebut, pengelola dapat mengetahui menu yang paling banyak terjual pada setiap cabang dan membandingkan pola penjualan antar-cabang.
 
-Query ini menggunakan PARTITION BY berdasarkan cabang sehingga peringkat dimulai kembali dari setiap cabang>
+**Maksud bisnis:** 
+<...>
 
 ## Aktivitas 2 — EXPLAIN ANALYZE
 > Tempel ringkasan plan (Index Scan / Seq Scan, actual time) + analisis singkat.
+- fact_penjualan: Seq Scan, dengan actual time=0.016..0.018 ms, membaca 12 baris. Data difilter menggunakan tanggal_id antara 1 sampai 6.
+- dim_menu: Seq Scan, dengan actual time=0.047..0.048 ms, membaca 5 baris.
+- Join: PostgreSQL menggunakan Hash Join dengan kondisi m.menu_id = f.menu_id untuk menggabungkan data dari dim_menu dan fact_penjualan.
+- Agregasi: HashAggregate digunakan untuk mengelompokkan data berdasarkan menu_name dan menghasilkan 5 baris.
+- sort : hasil agregasi diurutkan berdasarkan SUM(f.jumlah_terjual) secara menurun menggunakan metode quicksort dengan penggunaan memori 25 kB.
+- Planning Time: 0.347 ms.
+- Execution Time: 0.742 ms.
 - Jenis scan: <...>
 - Analisis: <perlu index? mengapa?>
 
