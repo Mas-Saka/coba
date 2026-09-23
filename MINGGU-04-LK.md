@@ -53,7 +53,7 @@ ORDER BY
 - Planning Time: 0.347 ms.
 - Execution Time: 0.742 ms.
 - Jenis scan: <...>
-- Analisis: <perlu index? mengapa?>
+- Analisis: <...>
 
 ## Aktivitas 3 — Information-gap (refleksi)
 - Query yang paling sulit disatukan saat pairing: <...>
