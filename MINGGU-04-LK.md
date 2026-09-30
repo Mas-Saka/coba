@@ -13,18 +13,18 @@
 | Bobot | 2% (Tugas 4) |
 
 ## Aktivitas 1 — Audience-Task-Context (1 paragraf)
-<
+
 
 **Audience**
+<dsad>
 
-dsad
 
 **Task**
+<dsad>
 
-adas
 **Context**
-asd
->
+<dsad>
+
 
 ## Aktivitas 2 — Wireframe lo-fi
 > Tempel foto kertas / link Excalidraw / sketsa ASCII. Sebut alasan per visual.
