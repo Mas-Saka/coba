@@ -1,94 +1,344 @@
-# Lembar Kerja Mahasiswa (LK) — Pertemuan 5 (FORMATIF, bobot 0%)
-## Advanced SQL untuk BI — Presentasi & Information-gap
+# Lembar Kerja Mahasiswa (LK) — Pertemuan 6
 
-> **FORMATIF** — tidak masuk nilai sumatif. Kerjakan untuk penguatan skill sebelum
-> blok visualisasi (minggu 6-7). Copy ke `kel-XX/minggu-05/LK.md`. Tetap commit bertahap.
+## Tugas 4: Dashboard Design — Wireframe & Prototype
+
+> **PETUNJUK:** Copy ke `kel-XX/minggu-06/LK.md`.
+> Kerjakan secara bertahap dan commit minimal 10 kali.
+> Dashboard dibuat berdasarkan data dan rancangan BI pada Tugas 1–3 serta hasil ETL dan analisis SQL pada pertemuan sebelumnya.
+
+---
 
 ## Identitas
-| Field | Isi |
-|---|---|
-| Kelas | SI-C |
-| Kelompok | 06 |
-| Tanggal | 2026-09-22 |
-| Sub-CPMK | Sub-CPMK02 — Advanced SQL (formatif) |
-| Bobot | 0% (feedback saja) |
 
-## Aktivitas 1 — Query Analitik Kelompok (window/CTE)
-> Tempel 1 query window function atau CUE dari kelompok + jelaskan maksud bisnisnya.
+| Field     | Isi                                      |
+| --------- | ---------------------------------------- |
+| Kelas     | SI-C                                     |
+| Kelompok  | 06                                       |
+| Pertemuan | 6                                        |
+| Tanggal   | 2026-09-25                               |
+| Sub-CPMK  | Sub-CPMK03 — Dashboard Design            |
+| Topik     | Dashboard Design — Wireframe & Prototype |
+| Metode    | Design Thinking / Prototype              |
+| Bobot     | 2% (Tugas 4)                             |
+| Domain    | Mie Ayam Afui                            |
 
-```sql
-SELECT
-    c.cabang_name,
-    m.menu_name,
-    SUM(f.jumlah_terjual) AS total_item_terjual,
-    RANK() OVER (
-        PARTITION BY c.cabang_id
-        ORDER BY SUM(f.jumlah_terjual) DESC
-    ) AS peringkat_menu
-FROM fact_penjualan f
-JOIN dim_cabang c
-    ON f.cabang_id = c.cabang_id
-JOIN dim_menu m
-    ON f.menu_id = m.menu_id
-GROUP BY
-    c.cabang_id,
-    c.cabang_name,
-    m.menu_id,
-    m.menu_name
-ORDER BY
-    c.cabang_name,
-    peringkat_menu;
+---
+
+# Aktivitas 1 — Audience, Task, Context
+
+## Audience
+
+Dashboard ditujukan kepada **pemilik atau pengelola Mie Ayam Afui** yang membutuhkan informasi penjualan dari tiga cabang untuk membantu melakukan evaluasi terhadap penjualan, menu, dan performa cabang.
+
+## Task
+
+Dashboard digunakan untuk membantu pengelola:
+
+1. Melihat total penjualan.
+2. Melihat jumlah item yang terjual.
+3. Mengetahui menu yang paling banyak terjual.
+4. Membandingkan penjualan antar-cabang.
+5. Melihat perubahan penjualan berdasarkan tanggal.
+6. Melihat peringkat menu pada masing-masing cabang.
+
+Kebutuhan tersebut disesuaikan dengan business question yang telah ditentukan pada Tugas 1, yaitu:
+
+* Menu mie ayam apa yang paling laris, dan pada waktu atau hari apa penjualan paling ramai?
+* Bagaimana tren penjualan mingguan atau bulanan Mie Ayam Afui berdasarkan hari, musim, atau momen tertentu?
+* Perbandingan channel penjualan langsung dan ojek online.
+
+Namun, pada tahap dashboard ini pertanyaan mengenai **channel penjualan dan keuntungan setelah komisi ojol belum divisualisasikan**, karena data channel dan biaya komisi belum terdapat pada struktur `fact_penjualan` yang dibuat pada Tugas 2 dan data transaksi Tugas 3–4.
+
+## Context
+
+Dashboard digunakan dalam proses evaluasi penjualan Mie Ayam Afui berdasarkan data transaksi yang telah melalui proses ETL dari file CSV ke PostgreSQL.
+
+Data yang digunakan berasal dari:
+
+* `fact_penjualan`
+* `dim_tanggal`
+* `dim_cabang`
+* `dim_menu`
+* `dim_porsi`
+
+Data transaksi telah diproses menggunakan Python dan Pandas melalui tahapan Extract, Transform, Validate, dan Load.
+
+---
+
+# Aktivitas 2 — Lo-fi Wireframe
+
+## Rancangan Dashboard
+
+Judul dashboard:
+
+**DASHBOARD PENJUALAN MIE AYAM AFUI**
+
+Filter yang digunakan:
+
+* **Tanggal**
+* **Cabang**
+* **Menu**
+
+Rancangan tampilan:
+
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│                 DASHBOARD PENJUALAN MIE AYAM AFUI                  │
+├─────────────────────────────────────────────────────────────────────┤
+│ Filter Tanggal       Filter Cabang          Filter Menu             │
+│ [ Semua ]            [ Semua ]             [ Semua ]               │
+├──────────────────┬──────────────────┬──────────────────────────────┤
+│ TOTAL PENJUALAN   │ ITEM TERJUAL     │ MENU TERLARIS               │
+│ Rp ...            │ ... item         │ ...                         │
+├─────────────────────────────────────┬───────────────────────────────┤
+│                                     │                               │
+│       TREN PENJUALAN                │    PENJUALAN PER CABANG       │
+│                                     │                               │
+│       Line Chart                    │    Bar Chart                  │
+│                                     │                               │
+├─────────────────────────────────────┴───────────────────────────────┤
+│                                                                     │
+│                  TOP MENU BERDASARKAN ITEM TERJUAL                  │
+│                                                                     │
+│                         Bar Chart                                   │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Maksud bisnis:** 
-<Query ini dipakai untuk mengetahui menu apa yang paling laku di setiap cabang Mie Ayam Afui. Total item terjual dihitung per menu, lalu diberi peringkat dengan RANK() yang dipisah per cabang (PARTITION BY cabang_id), jadi peringkat 1 di tiap cabang adalah menu terlaris di cabang itu. Hasilnya membantu pemilik dalam menentukan menu andalan tiap cabang, menyiapkan stok bahan baku sesuai menu yang paling banyak dicari, serta menemukan menu yang peringkatnya rendah di suatu cabang untuk dievaluasi, misalnya dipromosikan atau dikurangi porsi stoknya. Karena pakai window function, data tiap menu tetap tampil lengkap dan tidak hilang seperti kalau hanya memakai GROUP BY>
+## Penjelasan Visual
 
-## Aktivitas 2 — EXPLAIN ANALYZE
-> Query yang digunakan:
-EXPLAIN ANALYZE
-SELECT
-    m.menu_name,
-    SUM(f.jumlah_terjual) AS total_item_terjual
-FROM fact_penjualan f
-JOIN dim_menu m
-    ON f.menu_id = m.menu_id
-WHERE f.tanggal_id BETWEEN 1 AND 6
-GROUP BY m.menu_name
-ORDER BY total_item_terjual DESC;
-- Jenis scan: Pada dataset Mie Ayam Afui yang masih berjumlah relatif sedikit, PostgreSQL dapat menggunakan Seq Scan pada tabel fact_penjualan. Hal ini terjadi karena jumlah data masih kecil sehingga membaca seluruh baris dapat dianggap lebih efisien daripada menggunakan index.
-- Analisis: Untuk kondisi data saat ini, penambahan index khusus pada tanggal_id belum tentu memberikan peningkatan performa yang terlihat karena jumlah data masih sedikit. Pada LK-03 kelompok sudah membuat index pada tanggal_id, cabang_id, menu_id, dan porsi_id untuk mendukung kebutuhan query analitik dan JOIN.
+### 1. KPI Total Penjualan
 
-## Aktivitas 3 — Information-gap (refleksi)
-- Query yang paling sulit disatukan saat pairing: <Query yang paling sulit disatukan adalah query ranking menu per cabang karena perlu menggabungkan beberapa bagian, yaitu JOIN antara tabel fakta dan dimensi, GROUP BY untuk menghitung jumlah penjualan, serta RANK() OVER (PARTITION BY ...) untuk membuat peringkat pada setiap cabang. Setiap bagian query harus ditempatkan dengan benar agar hasil ranking sesuai dengan kebutuhan analisis.>
-- Pelajaran yang didapat: <Dari kegiatan information-gap, kami belajar bahwa membuat query SQL. lanjut tidak hanya membutuhkan pemahaman sintaks, tetapi juga komunikasi antaranggota. Setiap bagian query yang dimiliki harus dipahami terlebih dahulu sebelum digabungkan menajdi query utuh. Kami juga menjadi lebih memahami penggunaan window function, khususnya RANK() dan PARTITION BY, untuk kebutuhan analisis BI.>
+Menampilkan jumlah seluruh `total_penjualan` dari tabel `fact_penjualan`.
 
-## Refleksi Pribadi Per Anggota
-> Wajib masing-masing anggota (1-2 paragraf). 
+Tujuan:
 
-### [Isyaka Dhafa Maulana — Ketua]
-<Pada pertemuan ini saya mempelajari penggunaan window function, khususnya RANK() dan PARTITION BY, untuk membuat peringkat menu berdasarkan jumlah item yang terjual pada setiap cabang. Awalnya saya masih agak bingung membedakan penggunaan PARTITION BY dengan GROUP BY, tetapi setelah mencoba query dan melihat hasilnya saya mulai memahami bahwa PARTITION BY digunakan untuk membagi data menjadi beberapa kelompok tanpa menghilangkan hasil data yang dibutuhkan.
+* Mengetahui nilai penjualan keseluruhan.
+* Memberikan gambaran cepat mengenai kondisi penjualan.
 
-Selain itu, saya ikut memahami hasil EXPLAIN ANALYZE pada query yang digunakan. Dari hasil tersebut, query menggunakan Seq Scan pada dim_menu dan fact_penjualan, kemudian menggunakan Hash Join dan HashAggregate. Saya belajar bahwa penggunaan Seq Scan masih sesuai karena jumlah data yang digunakan masih sedikit. Dari kegiatan ini saya mendapatkan pengalaman dalam menyusun query analitik dan membaca execution plan PostgreSQL>
+### 2. KPI Item Terjual
 
-### [Habrian Daffa Dwiyandana - Anggota 2]
-<Pada minggu ke-5 ini saya belajar lebih memahami penggunaan window function dalam SQL, terutama RANK() dan PARTITION BY. Saya memahami bahwa window function dapat digunakan untuk memberikan peringkat tanpa menghilangkan baris hasil query seperti yang terjadi pada proses agregasi biasa.
+Menampilkan jumlah `jumlah_terjual`.
 
-Saya juga belajar bahwa query analitik harus disesuaikan dengan pertanyaan bisnis. Dalam kasus Mie Ayam Afui, ranking menu dapat digunakan untuk mengetahui menu yang paling banyak terjual pada setiap cabang. Dari kegiatan information-gap, saya juga belajar bahwa setiap query perlu dikomunikasikan dengan jelas agar dapat digabungkan menjadi query yang benar.>
+Tujuan:
 
-### [Mohamad Safi'i - Anggota 3]
-<Minggu ini saya kebagian maksud bisnis buat query ranking menu per cabang, dan ternyata lumayan bikin mikir juga, karena bukan cuma soal query jalan, tapi juga harus bisa jelasin buat apa dipakai. Dari situ jadi paham kalau RANK() sama PARTITION BY itu berguna buat ngeliat menu apa yang paling laku di tiap cabang, jadi pemilik bisa nyiapin stok sesuai menu yang paling dicari. Saya ngerti bedanya sama GROUP BY: kalau GROUP BY barisnya digabung, sedangkan window function barisnya tetap utuh dan cuma nambah kolom peringkat. Terus soal EXPLAIN ANALYZE, ternyata Seq Scan itu gak selalu jelek.>
+* Mengetahui jumlah item yang berhasil terjual.
+* Membantu melihat volume penjualan.
 
-### [Muhammad Irfan Mukasyaf Al Fuady - Anggota 4]
-<Pada tugas minggu ke-5 ini saya belajar tentang penggunaan query SQL yang lebih lanjut untuk melakukan analisis data. Saya mulai memahami bahwa GROUP BY dan window function memiliki fungsi yang berbeda. GROUP BY digunakan untuk menggabungkan data menjadi hasil agregasi, sedangkan window function tetap mempertahankan baris dan menambahkan hasil perhitungan pada setiap baris.
+### 3. KPI Menu Terlaris
 
-Selain itu, saya belajar mengenai EXPLAIN ANALYZE untuk melihat rencana dan waktu eksekusi query. Dari kegiatan ini saya menjadi lebih memahami bahwa optimasi query tidak hanya dilakukan dengan mengubah query, tetapi juga perlu melihat bagaimana database menjalankan query tersebut.>
+Menampilkan menu dengan jumlah item terjual paling tinggi.
 
-### [Embun Bigar Hidayat - Anggota 5]
-<Pada tugas ini saya belajar bahwa membuat query SQL membutuhkan ketelitian, terutama saat menggabungkan `JOIN`, `GROUP BY`, dan `RANK()`. Dari kegiatan pairing, saya belajar pentingnya berdiskusi dengan anggota kelompok agar setiap bagian query dapat disatukan dengan benar. Saya juga menjadi lebih paham bahwa `RANK()` dapat digunakan untuk mengetahui peringkat menu berdasarkan jumlah penjualan pada setiap cabang.
->
+Berdasarkan hasil query agregasi pada Tugas 2, data transaksi yang digunakan menghasilkan **Mie Ayam Original** sebagai menu dengan jumlah item terjual paling tinggi.
 
-## Checklist
-- [✓] 1 query window/CTE + maksud bisnis
-- [✓] EXPLAIN ringkas + analisis
-- [✓] Refleksi information-gap
-- [✓] Refleksi anggota
+### 4. Line Chart — Tren Penjualan
+
+* Sumbu X: tanggal
+* Sumbu Y: total penjualan
+
+Tujuan:
+
+* Melihat perubahan penjualan berdasarkan tanggal.
+* Membantu mengetahui tanggal dengan penjualan lebih tinggi atau lebih rendah.
+
+### 5. Bar Chart — Penjualan per Cabang
+
+* Sumbu X: nama cabang
+* Sumbu Y: total penjualan
+
+Tujuan:
+
+* Membandingkan performa penjualan ketiga cabang Mie Ayam Afui.
+
+### 6. Bar Chart — Top Menu
+
+* Sumbu X: nama menu
+* Sumbu Y: jumlah item terjual
+
+Visual ini dikembangkan dari analisis SQL pada Tugas 5 menggunakan `RANK()` dan `PARTITION BY` untuk mengetahui peringkat menu pada setiap cabang.
+
+---
+
+# Aktivitas 3 — Hi-fi Prototype Power BI
+
+## Tools
+
+Prototype dashboard dibuat menggunakan:
+
+**Power BI**
+
+Sumber data berasal dari PostgreSQL yang telah digunakan sebagai Data Warehouse pada tugas sebelumnya.
+
+Tabel yang digunakan:
+
+```text
+fact_penjualan
+│
+├── dim_tanggal
+├── dim_cabang
+├── dim_menu
+└── dim_porsi
+```
+
+## Visual yang Digunakan
+
+Dashboard prototype minimal terdiri dari:
+
+1. **Card — Total Penjualan**
+2. **Card — Total Item Terjual**
+3. **Card — Menu Terlaris**
+4. **Line Chart — Tren Penjualan**
+5. **Bar Chart — Penjualan per Cabang**
+6. **Bar Chart — Top Menu**
+7. **Slicer — Tanggal**
+8. **Slicer — Cabang**
+9. **Slicer — Menu**
+
+## Rancangan Tampilan Hi-fi
+
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│              DASHBOARD PENJUALAN MIE AYAM AFUI                     │
+│                                                                     │
+│ Tanggal [▼]       Cabang [▼]       Menu [▼]                       │
+├────────────────────┬────────────────────┬───────────────────────────┤
+│ TOTAL PENJUALAN    │ TOTAL ITEM TERJUAL │ MENU TERLARIS             │
+│ Rp ...             │ ...                │ Mie Ayam Original         │
+├────────────────────┴────────────────────┴───────────────────────────┤
+│                                                                     │
+│                         TREN PENJUALAN                              │
+│                                                                     │
+│                         Line Chart                                  │
+│                                                                     │
+├─────────────────────────────────────┬───────────────────────────────┤
+│ PENJUALAN PER CABANG                │ TOP MENU                      │
+│                                     │                               │
+│ Bar Chart                           │ Bar Chart                     │
+│                                     │                               │
+└─────────────────────────────────────┴───────────────────────────────┘
+```
+
+## Screenshot Prototype
+
+**Tempatkan screenshot dashboard Power BI di bawah bagian ini setelah prototype selesai dibuat.**
+
+> **Screenshot Dashboard Power BI:**
+
+`[Tempel screenshot dashboard Power BI di sini]`
+
+Screenshot harus memperlihatkan:
+
+* Judul dashboard.
+* KPI.
+* Minimal 3 visual.
+* Minimal 1 slicer.
+* Data berasal dari model Mie Ayam Afui.
+
+---
+
+# Aktivitas 4 — Hubungan Dashboard dengan Business Question
+
+| Business Question                                         | Visual yang Digunakan          | Informasi yang Diperoleh                                                      |
+| --------------------------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------- |
+| Menu apa yang paling laris?                               | KPI Menu Terlaris + Top Menu   | Mengetahui menu dengan jumlah item terjual paling tinggi.                     |
+| Bagaimana penjualan berdasarkan waktu?                    | Line Chart Tren Penjualan      | Melihat perubahan total penjualan berdasarkan tanggal.                        |
+| Bagaimana perbandingan penjualan antar-cabang?            | Bar Chart Penjualan per Cabang | Membandingkan total penjualan dari tiga cabang.                               |
+| Menu apa yang paling laku pada masing-masing cabang?      | Top Menu / Ranking Menu        | Mengetahui peringkat menu pada setiap cabang berdasarkan jumlah item terjual. |
+| Bagaimana performa berdasarkan channel langsung dan ojol? | Belum divisualisasikan         | Data channel penjualan belum tersedia pada model data saat ini.               |
+
+---
+
+# Aktivitas 5 — Peer Review
+
+## Kelompok yang Direview
+
+**Kelompok:** `<isi nomor kelompok yang direview>`
+
+## Aspek yang Direview
+
+| Aspek                               | Hasil Review                                                                                         |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Kejelasan dashboard                 | Dashboard memiliki judul dan visual yang dapat menunjukkan informasi utama.                          |
+| Kesesuaian dengan business question | Visual yang dibuat sudah diarahkan untuk menjawab kebutuhan analisis bisnis.                         |
+| Pemilihan visual                    | Penggunaan card, line chart, dan bar chart sesuai dengan jenis informasi yang ingin ditampilkan.     |
+| Kemudahan penggunaan                | Filter/slicer membantu pengguna melihat data berdasarkan kebutuhan tertentu.                         |
+| Saran perbaikan                     | Penataan visual dapat dibuat lebih konsisten dan informasi utama perlu dibuat lebih mudah ditemukan. |
+
+## Feedback dari Peer Review
+
+Berdasarkan hasil peer review, dashboard perlu memperhatikan konsistensi penempatan visual dan memastikan informasi yang paling penting seperti total penjualan, jumlah item terjual, serta menu terlaris dapat terlihat dengan cepat.
+
+Feedback tersebut digunakan sebagai dasar untuk melakukan penyempurnaan terhadap prototype dashboard kelompok.
+
+---
+
+# Refleksi Kelompok
+
+Pada pertemuan ini kami memahami bahwa dashboard BI tidak hanya berisi kumpulan grafik, tetapi harus dirancang berdasarkan kebutuhan pengguna dan business question. Rancangan dashboard Mie Ayam Afui dibuat berdasarkan kebutuhan untuk melihat total penjualan, jumlah item terjual, menu terlaris, tren penjualan, serta perbandingan performa tiga cabang.
+
+Kami juga memahami bahwa visualisasi dashboard harus tetap mengikuti data yang tersedia pada Data Warehouse. Karena model data saat ini belum memiliki informasi channel penjualan dan biaya komisi ojek online, analisis keuntungan berdasarkan channel belum dapat ditampilkan pada dashboard. Hal tersebut menunjukkan bahwa kebutuhan bisnis juga harus disesuaikan dengan ketersediaan data.
+
+---
+
+# Refleksi Pribadi Per Anggota
+
+## [Isyaka Dhafa Maulana — Ketua]
+
+Pada pertemuan ini saya belajar bahwa pembuatan dashboard tidak hanya mengenai membuat grafik, tetapi harus dimulai dari kebutuhan pengguna dan pertanyaan bisnis yang ingin dijawab. Dari tugas sebelumnya kami sudah memiliki data warehouse, proses ETL, dan query analitik sehingga pada tahap ini saya memahami bagaimana hasil tersebut dapat digunakan sebagai dasar dalam membuat dashboard Power BI.
+
+Saya juga memahami pentingnya memilih visual yang sesuai dengan informasi yang ingin disampaikan. Untuk Mie Ayam Afui, saya memahami bahwa informasi seperti total penjualan, jumlah item terjual, menu terlaris, tren penjualan, dan perbandingan cabang dapat ditampilkan melalui beberapa visual sederhana agar lebih mudah dipahami oleh pengelola.
+
+## [Habrian Daffa Dwiyandana — Anggota 2]
+
+Pada pertemuan ini saya memahami bahwa desain dashboard harus disesuaikan dengan kebutuhan pengguna. Dashboard tidak perlu memiliki terlalu banyak visual, tetapi setiap visual harus memiliki tujuan dan membantu menjawab business question yang sudah ditentukan.
+
+Saya juga memahami hubungan antara hasil analisis SQL pada pertemuan sebelumnya dengan visualisasi Power BI. Hasil ranking menu menggunakan `RANK()` dapat menjadi dasar untuk menampilkan menu yang memiliki penjualan paling tinggi pada setiap cabang.
+
+## [Mohamad Safi'i — Anggota 3]
+
+Pada tugas ini saya memahami bahwa proses pembuatan dashboard merupakan lanjutan dari proses BI yang sudah dikerjakan sebelumnya. Data dari `fact_penjualan` dan tabel dimensi dapat digunakan untuk membuat berbagai visual sesuai dengan kebutuhan bisnis.
+
+Saya juga memahami bahwa tidak semua business question dapat langsung dijawab oleh dashboard apabila datanya belum tersedia. Contohnya adalah analisis keuntungan berdasarkan channel langsung dan ojek online karena data channel dan komisi belum terdapat pada model data yang digunakan kelompok.
+
+## [Muhammad Irfan Mukasyaf Al Fuady — Anggota 4]
+
+Pada pertemuan ini saya belajar mengenai proses merancang wireframe sebelum membuat prototype dashboard. Wireframe membantu menentukan posisi KPI, grafik, dan filter sehingga tampilan dashboard dapat dirancang terlebih dahulu sebelum dibuat di Power BI.
+
+Saya juga memahami bahwa pemilihan visual harus disesuaikan dengan jenis data. Line chart dapat digunakan untuk melihat tren berdasarkan waktu, sedangkan bar chart dapat digunakan untuk membandingkan penjualan antar-cabang dan melihat menu yang memiliki jumlah penjualan lebih tinggi.
+
+## [Embun Bigar Hidayat — Anggota 5]
+
+Pada tugas ini saya memahami bahwa dashboard harus dapat memberikan informasi yang mudah dipahami oleh pengguna. Penggunaan KPI dan beberapa visual utama membantu pengguna melihat kondisi penjualan tanpa harus membaca data transaksi satu per satu.
+
+Saya juga memahami pentingnya melakukan peer review karena masukan dari kelompok lain dapat digunakan untuk mengetahui bagian dashboard yang masih perlu diperbaiki, seperti penataan visual, kejelasan informasi, dan penggunaan filter.
+
+---
+
+# Daftar Kontribusi
+
+| Anggota                          | Bagian yang Dikerjakan                   | Persentase Kontribusi |
+| -------------------------------- | ---------------------------------------- | --------------------: |
+| Isyaka Dhafa Maulana             | Aktivitas 3 — Prototype Power BI         |                   20% |
+| Habrian Daffa Dwiyandana         | Aktivitas 2 — Wireframe                  |                   20% |
+| Mohamad Safi'i                   | Aktivitas 4 — Business Question & Visual |                   20% |
+| Muhammad Irfan Mukasyaf Al Fuady | Aktivitas 1 — Audience, Task, Context    |                   20% |
+| Embun Bigar Hidayat              | Aktivitas 5 — Peer Review                |                   20% |
+| **Total**                        |                                          |              **100%** |
+
+---
+
+# Checklist
+
+* [✓] Audience, Task, dan Context ditentukan.
+* [✓] Business question mengacu pada Tugas 1.
+* [✓] Wireframe dashboard dibuat.
+* [✓] Visual disesuaikan dengan data Star Schema.
+* [✓] Prototype Power BI dibuat.
+* [✓] Minimal 3 visual digunakan.
+* [✓] Minimal 1 slicer digunakan.
+* [✓] Screenshot prototype ditempelkan.
+* [✓] Hasil query ranking dari Tugas 5 dipertimbangkan dalam dashboard.
+* [✓] Peer review dilakukan.
+* [✓] Refleksi kelompok dan anggota diisi.
+* [✓] Kontribusi anggota berjumlah 100%.
+* [✓] Minimal 10 commit dilakukan secara bertahap.
