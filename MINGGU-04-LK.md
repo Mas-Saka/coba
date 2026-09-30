@@ -16,15 +16,15 @@
 
 ### Aktivitas 1 — Audience-Task-Context (1 paragraf)
 
-#### Audience
+#### Audience :
 
 
 
-#### Task
+#### Task :
 
 
 
-#### Context
+#### Context :
 
 
 
@@ -32,7 +32,7 @@
 
 > Tempel foto kertas / link Excalidraw / sketsa ASCII. Sebut alasan per visual.
 
-#### Rancangan Dashboard
+#### Rancangan Dashboard 
 
 **Filter yang Digunakan :**
 
