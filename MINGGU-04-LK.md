@@ -53,7 +53,8 @@
 > Screenshot dashboard (min. 3 visual + 1 slicer). `.pbix` opsional commit.
 
 **Daftar visual:**
-
+- 
+- 
 
 **Screenshot Prototype:**
 
@@ -61,14 +62,15 @@
 
 ### Aktivitas 4 — Peer Review (feedback ke 1 kelompok lain)
 
-* **Kelompok yang direview:** `<isi kelompok yang direview>`
-* **Feedback (clarity / visual / audience-fit):** 
+- Kelompok yang direview: <kel-YY>
+- Feedback (clarity / visual / audience-fit): <...>
 
 ### Refleksi
 
-* **Perubahan desain dari wireframe → prototype berdasarkan feedback:** 
+- Perubahan desain dari wireframe → prototype berdasarkan feedback: <...>
 
 
+### Refleksi Pribadi Per Anggota
 
 #### [Isyaka Dhafa Maulana — Ketua]
 
@@ -76,9 +78,7 @@
 #### [Habrian Daffa Dwiyandana - Anggota 2]
 
 
-
 #### [Mohamad Safi'i - Anggota 3]
-
 
 
 #### [Muhammad Irfan Mukasyaf Al Fuady - Anggota 4]
