@@ -127,7 +127,7 @@ Rancangan Dashboard:
 - Bar Chart — Penjualan per Menu
   Menampilkan perbandingan total penjualan dari setiap menu.
 
-**Screenshot dashboard Power BI:**
+**Screenshot Full Dashboard Power BI:**
 
 ![alt text](dashboardfull.png)
 
