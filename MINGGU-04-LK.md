@@ -128,6 +128,7 @@ Rancangan Dashboard:
   Menampilkan perbandingan total penjualan dari setiap menu.
 
 **Screenshot dashboard Power BI:**
+
 ![alt text](dashboardfull.png)
 
 ## Aktivitas 4 — Peer Review (feedback ke 1 kelompok lain)
