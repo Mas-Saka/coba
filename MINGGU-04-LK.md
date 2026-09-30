@@ -26,6 +26,7 @@
 > Tempel foto kertas / link Excalidraw / sketsa ASCII. Sebut alasan per visual.
 
 Rancangan Dashboard:
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
 │                  DASHBOARD PENJUALAN MIE AYAM AFUI                  │
@@ -93,6 +94,7 @@ Rancangan Dashboard:
 │                                                                     │
 │                          Bar Chart                                  │
 └─────────────────────────────────────────────────────────────────────┘
+```
 
 **Alasan visual:**
 
