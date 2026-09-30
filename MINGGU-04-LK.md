@@ -166,22 +166,24 @@ Rancangan Dashboard:
 
 
 
-### Refleksi Pribadi Per Anggota
+### Refleksi Pribadi Per Anggota :
 
 #### [Isyaka Dhafa Maulana — Ketua]
+<Pada LK minggu ini, saya belajar tentang dashboard design, khususnya pada Aktivitas 3 yaitu membuat prototype hi-fi menggunakan Power BI. Saya belajar bagaimana mengubah data yang sebelumnya berbentuk tabel atau database yang cukup sulit dibaca secara langsung menjadi informasi yang lebih sederhana dan mudah dipahami melalui visualisasi. Dalam aktivitas ini, saya membuat Card untuk KPI, Slicer dalam bentuk dropdown, Line Chart untuk tren penjualan, Column Chart untuk penjualan berdasarkan porsi, serta Bar Chart untuk penjualan per cabang dan per menu. 
 
+Dari kegiatan ini, saya memahami bahwa visualisasi data dapat membantu pemilik Mie Ayam Afui melihat informasi penjualan dengan lebih cepat, seperti tren penjualan, perbandingan antar-cabang, dan penjualan setiap menu. Dengan adanya dashboard, data yang sebelumnya sulit dibaca dapat menjadi informasi yang lebih jelas dan berguna bagi pemilik dalam melakukan evaluasi serta mengambil keputusan terkait penjualan.>
 
 #### [Habrian Daffa Dwiyandana - Anggota 2]
-
+<refleksi>
 
 #### [Mohamad Safi'i - Anggota 3]
-
+<refleksi>
 
 #### [Muhammad Irfan Mukasyaf Al Fuady - Anggota 4]
-
+<refleksi>
 
 #### [Embun Bigar Hidayat - Anggota 5]
-
+<refleksi>
 
 
 ### Daftar Kontribusi
