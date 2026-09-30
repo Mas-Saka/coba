@@ -15,7 +15,11 @@
 | Bobot    | 2% (Tugas 4)                  |
 
 ## Aktivitas 1 — Audience-Task-Context (1 paragraf)
+- Audience:
 
+- Task:
+
+- Context: 
 
 ## Aktivitas 2 — Wireframe lo-fi
 
@@ -82,3 +86,4 @@
 - [ ] Peer review ke kelompok lain
 - [ ] Refleksi perubahan + refleksi anggota + kontribusi 100%
 - [ ] >=10 commit
+
