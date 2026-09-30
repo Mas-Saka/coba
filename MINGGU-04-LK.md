@@ -15,14 +15,14 @@
 ## Aktivitas 1 — Audience-Task-Context (1 paragraf)
 <
 
-**Audience
+**Audience**
+dsad
 
-**Task
+**Task**
 
-**Context
-
-
-
+adas
+**Context**
+asd
 >
 
 ## Aktivitas 2 — Wireframe lo-fi
@@ -30,11 +30,11 @@
 <
 ## Rancangan Dashboard 
 
-Judul Dashboard :
+**Judul Dashboard :**
 
-Filter yang Digunakan :
+**Filter yang Digunakan :**
 
-Rancangan Tampilan
+**Rancangan Tampilan**
 
 >
 **Alasan visual:** (mis. "bar — kategori; line — tren harian; KPI card — metrik utama")
