@@ -1,6 +1,6 @@
 # Lembar Kerja Mahasiswa (LK) — Pertemuan 6
 
-## Tugas 4: Dashboard Design — Wireframe & Prototype
+### Tugas 4: Dashboard Design — Wireframe & Prototype
 
 > **PETUNJUK:** Copy ke `kel-XX/minggu-06/LK.md`.
 > Kerjakan secara bertahap dan commit minimal 10 kali.
@@ -8,7 +8,7 @@
 
 ---
 
-## Identitas
+### Identitas
 
 | Field     | Isi                                      |
 | --------- | ---------------------------------------- |
@@ -24,13 +24,13 @@
 
 ---
 
-# Aktivitas 1 — Audience, Task, Context
+### Aktivitas 1 — Audience, Task, Context
 
-## Audience
+#### Audience
 
 Dashboard ditujukan kepada **pemilik atau pengelola Mie Ayam Afui** yang membutuhkan informasi penjualan dari tiga cabang untuk membantu melakukan evaluasi terhadap penjualan, menu, dan performa cabang.
 
-## Task
+#### Task
 
 Dashboard digunakan untuk membantu pengelola:
 
@@ -49,7 +49,7 @@ Kebutuhan tersebut disesuaikan dengan business question yang telah ditentukan pa
 
 Namun, pada tahap dashboard ini pertanyaan mengenai **channel penjualan dan keuntungan setelah komisi ojol belum divisualisasikan**, karena data channel dan biaya komisi belum terdapat pada struktur `fact_penjualan` yang dibuat pada Tugas 2 dan data transaksi Tugas 3–4.
 
-## Context
+#### Context
 
 Dashboard digunakan dalam proses evaluasi penjualan Mie Ayam Afui berdasarkan data transaksi yang telah melalui proses ETL dari file CSV ke PostgreSQL.
 
@@ -65,9 +65,9 @@ Data transaksi telah diproses menggunakan Python dan Pandas melalui tahapan Extr
 
 ---
 
-# Aktivitas 2 — Lo-fi Wireframe
+### Aktivitas 2 — Lo-fi Wireframe
 
-## Rancangan Dashboard
+#### Rancangan Dashboard
 
 Judul dashboard:
 
