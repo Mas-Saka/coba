@@ -112,22 +112,47 @@ Rancangan Dashboard:
   Menampilkan jumlah menu yang tersedia dalam data.
 - Card — Total Cabang
   Menampilkan jumlah cabang yang dianalisis.
+- Gambar Semua Card :
+
+    ![alt text](card.png)
+
+
 - Slicer — Tahun
   Digunakan untuk memilih tahun yang ingin ditampilkan.
 - Slicer — Nama Cabang
   Digunakan untuk memfilter data berdasarkan cabang tertentu.
 - Slicer — Kategori Menu
   Digunakan untuk memfilter data berdasarkan kategori menu.
+- Gambar Semua Slicer :
+
+    ![alt text](slicer.png)
+
+
 - Line Chart — Tren Penjualan
   Menampilkan perubahan total penjualan berdasarkan tanggal sehingga pengguna dapat melihat pola naik atau turunnya penjualan.
+- Gambar Semua Line Chart :
+
+    ![alt text](linechart.png)
+
+
 - Column Chart — Penjualan Berdasarkan Porsi
   Menampilkan perbandingan total penjualan berdasarkan jenis porsi.
+- Gambar Semua Column Chart :
+
+  ![alt text](columnchart.png)
+
+
 - Bar Chart — Penjualan per Cabang
   Menampilkan perbandingan total penjualan dari setiap cabang.
 - Bar Chart — Penjualan per Menu
   Menampilkan perbandingan total penjualan dari setiap menu.
+- Gambar Semua Bar Chart :
 
-**Screenshot Full Dashboard Power BI:**
+  ![alt text](barchart.png)
+
+
+
+**Screenshot dashboard Power BI:**
 
 ![alt text](dashboardfull.png)
 
