@@ -37,11 +37,12 @@
 **Filter yang Digunakan :**
 
 
-**Rancangan Tampilan**
+
+**Rancangan Tampilan :**
 
 
 
-**Alasan visual:**
+**Alasan visual :**
 
 
 #### Penjelasan Visual
