@@ -104,10 +104,31 @@ Rancangan Dashboard:
 > Screenshot dashboard (min. 3 visual + 1 slicer). `.pbix` opsional commit.
 
 **Daftar visual:**
-
+- Card — Total Penjualan
+  Menampilkan total keseluruhan nilai penjualan dari data transaksi.
+- Card — Total Transaksi
+  Menampilkan jumlah transaksi yang terdapat pada data.
+- Card — Total Menu
+  Menampilkan jumlah menu yang tersedia dalam data.
+- Card — Total Cabang
+  Menampilkan jumlah cabang yang dianalisis.
+- Slicer — Tahun
+  Digunakan untuk memilih tahun yang ingin ditampilkan.
+- Slicer — Nama Cabang
+  Digunakan untuk memfilter data berdasarkan cabang tertentu.
+- Slicer — Kategori Menu
+  Digunakan untuk memfilter data berdasarkan kategori menu.
+- Line Chart — Tren Penjualan
+  Menampilkan perubahan total penjualan berdasarkan tanggal sehingga pengguna dapat melihat pola naik atau turunnya penjualan.
+- Column Chart — Penjualan Berdasarkan Porsi
+  Menampilkan perbandingan total penjualan berdasarkan jenis porsi.
+- Bar Chart — Penjualan per Cabang
+  Menampilkan perbandingan total penjualan dari setiap cabang.
+- Bar Chart — Penjualan per Menu
+  Menampilkan perbandingan total penjualan dari setiap menu.
 
 **Screenshot dashboard Power BI:**
-`[Tempel screenshot prototype Power BI di sini]`
+![alt text](dashboardfull.png)
 
 ## Aktivitas 4 — Peer Review (feedback ke 1 kelompok lain)
 
