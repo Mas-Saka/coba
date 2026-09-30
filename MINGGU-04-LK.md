@@ -16,15 +16,15 @@
 
 ### Aktivitas 1 — Audience-Task-Context (1 paragraf)
 
-####Audience
+#### Audience
 
 Dashboard ditujukan kepada pemilik atau pengelola Mie Ayam Afui yang membutuhkan informasi penjualan dari tiga cabang untuk membantu melihat kondisi penjualan, menu, dan performa masing-masing cabang.
 
-####Task
+#### Task
 
 Dashboard digunakan untuk melihat total penjualan, jumlah item yang terjual, menu terlaris, tren penjualan berdasarkan tanggal, perbandingan penjualan antar-cabang, serta peringkat menu pada masing-masing cabang. Kebutuhan tersebut disesuaikan dengan business question pada tugas sebelumnya dan hasil analisis `RANK()` pada LK 5.
 
-####Context
+#### Context
 
 Dashboard dibuat menggunakan Power BI dengan sumber data dari PostgreSQL Data Warehouse yang telah dibangun pada LK 3 dan diisi melalui proses ETL pada LK 4. Data yang digunakan berasal dari `fact_penjualan`, `dim_tanggal`, `dim_cabang`, `dim_menu`, dan `dim_porsi`. Data channel penjualan langsung dan ojek online serta biaya komisi belum tersedia pada model data saat ini sehingga belum digunakan dalam dashboard.
 
