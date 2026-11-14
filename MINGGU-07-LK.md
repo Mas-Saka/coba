@@ -71,7 +71,7 @@ Diagram Alur Interaksi Pengguna
 ```
 
 **Screenshot dashboard interaktif:** 
-<dashboardutama.png>
+ ![alt text](dashboardutama.png)
 
 ## Aktivitas 4 — (Bonus) Row-Level Security
 - Role: <nama> — filter DAX: <`[outlet_code]="A"`>
