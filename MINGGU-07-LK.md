@@ -27,6 +27,7 @@
 <alur>
 
 Diagram Alur Interaksi Pengguna
+```text
 +--------------------------+
 | Membuka Dashboard Utama  |
 +--------------------------+
@@ -67,6 +68,8 @@ Diagram Alur Interaksi Pengguna
 +--------------------------+
 | Kembali ke Dashboard     |
 +--------------------------+
+```
+
 **Screenshot dashboard interaktif:** 
 <dashboardutama.png>
 
